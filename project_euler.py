@@ -1,9 +1,15 @@
+""" Solution to Project Euler Problem 1"""
+
+
 def multiples_of_3_or_5():
     result = 0
     for num in range(1000):
         if num % 3 == 0 or num % 5 == 0:
             result += num
     return result
+
+
+""" Solution to Project Euler Problem 2"""
 
 
 def fibonacci(num: int):
@@ -21,7 +27,11 @@ def fibonacci(num: int):
     return sum_result
 
 
-"""All prime numbers are odd except for 2"""
+""" Solution to Project Euler Problem 3
+
+All prime numbers are odd except for 2
+
+"""
 
 
 def larger_prime_factor(num: int):
@@ -38,7 +48,9 @@ def larger_prime_factor(num: int):
     return prime_counter
 
 
-""" Largest Palindrome two numbers and three digits """
+""" Solution to Project Euler Problem 4
+
+Largest Palindrome two numbers and three digits """
 
 
 def largest_palindrome():
@@ -59,7 +71,13 @@ def is_palindrome(num: int):
     return num == num_reverse
 
 
-# We know that 2520 and all it's multiples are divisible by 1-10
+"""
+Solution to Project Euler Problem 5
+We know that 2520 and all it's multiples are divisible by 1-10
+
+"""
+
+
 def smallest_multiple():
     starting_point = 2520
     is_num = False
@@ -77,6 +95,11 @@ def smallest_multiple():
     return starting_point
 
 
+"""
+Solution to Project Euler Problem 6
+"""
+
+
 def sum_square_difference(range_num: int):
     sum_of_square = 0
     square_of_sum = 0
@@ -84,6 +107,9 @@ def sum_square_difference(range_num: int):
         sum_of_square += num ** 2
         square_of_sum += num
     return (square_of_sum ** 2) - sum_of_square
+
+
+""" Solution to Project Euler Problem 7 """
 
 
 def find_prime_of_large_number(num: int):
@@ -124,6 +150,9 @@ def convert_to_list_of_ints(num: int):
     return list_of_ints
 
 
+""" Solution to Project Euler Problem 8 """
+
+
 def product_series(int_list: list, limit: int):
     product = 0
     slow = 0
@@ -142,15 +171,19 @@ def product_series(int_list: list, limit: int):
     return product
 
 
-""" a + b + c = sum
+""" 
+
+Solution to Project Euler Problem 9
+
+a + b + c = sum
    c = sum -b -a
 """
 
 
-def pythagorean_triple(sum: int):
-    for a in range(1, sum):
-        for b in range(a + 1, sum - a):
-            c = sum - a - b
+def pythagorean_triple(sum_input: int):
+    for a in range(1, sum_input):
+        for b in range(a + 1, sum_input - a):
+            c = sum_input - a - b
             if a ** 2 + b ** 2 == c ** 2:
                 return a * b * c
     return -1
@@ -180,16 +213,16 @@ def summation_of_primes(n: int):
 
 
 def summation_of_primes_fast(n: int):
-    sum = 0
+    sum_int = 0
     for num in prime_generator(n):
-        sum += num
-    return sum
+        sum_int += num
+    return sum_int
 
 
 """
 For all natural numbers between 2 and the limit + 1
 determine if prime by analyzing multiples of numbers.
-Performing mulitplication is much faster than division
+Performing multiplication is much faster than division
 
 """
 
@@ -252,20 +285,20 @@ def int_grid_creator(num_block: list, length: int, width: int):
     return grid
 
 
-def adjacent_product(grid: list, limit: int):
+def adjacent_product_up_down(grid: list, limit: int):
     max_product = 0
     column = 0
     while column <= 20 - limit:
-        max_of_adj = adjacent_product_helper(grid, limit, column)
+        max_of_adj = adjacent_product_helper_up_down(grid, limit, column)
         if max_of_adj > max_product:
             max_product = max_of_adj
         column += 1
     return max_product
 
 
-def adjacent_product_helper(grid: list, limit: int, col: int):
+def adjacent_product_helper_up_down(grid: list, limit: int, col: int):
     max_product = 0
-    a = 0
+    a = col
     while a <= 20 - limit:
         b = a + 1
         count = 0
@@ -281,12 +314,40 @@ def adjacent_product_helper(grid: list, limit: int, col: int):
     return max_product
 
 
-def adjacent_product_down_up():
-    pass
+def adjacent_product_helper_down_up(grid: list, limit: int, row: int):
+    max_product = 0
+    column = 0
+    row_num = row
+    while row_num >= row - (row - limit + 1):
+        b_row = row_num - 1
+        b_column = column + 1
+        count = 0
+        inner_product = grid[row_num][column]
+        while count < limit - 1:
+            inner_product *= grid[b_row][b_column]
+            count += 1
+            b_row -= 1
+            b_column += 1
+        row_num -= 1
+        column += 1
+        if inner_product > max_product:
+            max_product = inner_product
+
+    return max_product
+
+
+def adjacent_product_down_up(grid: list, limit: int):
+    max_product = 0
+    for num in range(len(grid) - 1, -1, -1):
+        max_of_adj = adjacent_product_helper_down_up(grid, limit, num)
+        if max_of_adj > max_product:
+            max_product = max_of_adj
+    return max_product
 
 
 """ Solution to Project Euler Problem 11"""
 
 
 def largest_product_grid(grid: list, limit: int):
-    return max([adjacent_product(grid, limit), vertical_product(grid, limit), horizontal_product(grid, limit)])
+    return max([adjacent_product_up_down(grid, limit), vertical_product(grid, limit), horizontal_product(grid, limit),
+                adjacent_product_down_up(grid, limit)])
