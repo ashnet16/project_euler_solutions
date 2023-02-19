@@ -345,9 +345,43 @@ def adjacent_product_down_up(grid: list, limit: int):
     return max_product
 
 
-""" Solution to Project Euler Problem 11"""
+""" Solution to Project Euler Problem 11:
+    Largest product in a grid
+"""
 
 
 def largest_product_grid(grid: list, limit: int):
     return max([adjacent_product_up_down(grid, limit), vertical_product(grid, limit), horizontal_product(grid, limit),
                 adjacent_product_down_up(grid, limit)])
+
+
+""" Solution to Project Euler Problem 12 :
+    Highly divisible triangular number
+    The nth triangular number is n(n+1)/2
+"""
+
+
+def find_highly_div_tri_num(div_limit: int):
+    num = 1
+    divs = 0
+    result = 0
+    while divs < div_limit:
+        result = find_nth_triangular_number(num)
+        divs = len(find_div_of_number(result))
+        num += 1
+    return result
+
+
+def find_div_of_number(num: int):
+    divisors = set()
+    divisors.add(1)
+    divisors.add(num)
+    for prime_num in prime_generator(num):
+        if num % prime_num == 0:
+            divisors.add(prime_num)
+            divisors.add(num // prime_num)
+    return divisors
+
+
+def find_nth_triangular_number(n: int):
+    return n * (n + 1) // 2
